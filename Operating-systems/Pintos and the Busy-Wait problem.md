@@ -3,7 +3,7 @@
 >This is an open-source UNIX like Operating System built for education purposes. So you can image it is a barebone OS, with some basic features but still has many rooms for improvements.
 
 - This operating system has a basic Scheduler and know how to "effective" arrange processes.
-- But since it has one of the most trouble some "busy-waiting", something must be done to address this problem
+- But since it has one of the most trouble some "[[Busy-waiting]]", something must be done to address this problem
 
 ### 1. The problem
 ```C
