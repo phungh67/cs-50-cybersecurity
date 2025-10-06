@@ -147,3 +147,64 @@ static void wake_threads(struct thread *t, void *aux){
  }
 }
 ```
+
+### Problems with above implement
+This method is petty easy to implement, but costs CPU cycles because each time, it iterates through all threads, including the active one with `thead_foreach()`. Since it does not require any additional space, just a single new attribute to the `thread` structure, it requires a considerable amount of power.
+In DSA, we have the priority queue to maintain a list of object that must follow a specific order bases on some criteria. Luckily, the `list` library in C provide a method to put new element into the list and maintain the custom order that can be programmed by user. We just need a comparison.
+If somehow, we manage these threads and only check for *ready to wake* thread and end the selection beforehand, it will save a lot of time. Instead of `O(n)`, we just have `O(k)` or even `O(1)`, with `k` is the number of current sleeping threads (which must be smaller that the total of `threads` in the system).
+
+```C
+struct list thread_list;
+...
+/**
+ * Comparison function for each threads. To maximize the performance,
+ * the sleep thread should be kept ordered. The thread that has smaller
+ * remaining time should be woke up first.
+ * @param: two list of thread element 1 and 2, get from thread 1 and 2.
+ * @return: boolean result if thread 1 sleep time (remain) is smaller than 2.
+ */
+
+static bool thread_comparison(struct list_elem *le1, struct list_elem *le2){
+  struct thread *t1, *t2;
+  t1 = list_entry(le1, struct thread, elem);
+  t2 = list_entry(le2, struct thread, elem);
+  return t1->sleep_ticks < t2->sleep_ticks;
+}
+...
+/* Sleeps for approximately TICKS timer ticks.  Interrupts must
+   be turned on. */
+void timer_sleep (int64_t ticks){
+  int64_t start = timer_ticks ();
+  struct thread *current = thread_current();
+
+  ASSERT (intr_get_level () == INTR_ON);
+  // while (timer_elapsed (start) < ticks)
+  //   thread_yield ();
+  // desired wake up time
+  current->sleep_ticks = start + ticks;  
+
+  // disable the interrupt, check the manual of pintos for inspiration
+  enum intr_level old_level = intr_disable();
+  // sort the threads in order, less time, wake up first
+  list_insert_ordered(&thread_list, &current->elem, thread_comparison, NULL);
+  thread_block(); 
+
+  // assign the previous level of interrupt (used before user implemented logic)
+  intr_set_level(old_level);
+}
+...
+/* Timer interrupt handler. */
+static void timer_interrupt (struct intr_frame *args UNUSED){
+  ticks++;
+  thread_tick ();
+  
+  struct thread *current;
+  while(!list_empty(&thread_list)){
+    current = list_entry(list_front(&thread_list), struct thread, elem);
+    if(timer_ticks() < current->sleep_ticks)
+      break;
+    list_pop_front(&thread_list);
+    thread_unblock(current);
+  }
+}
+```
