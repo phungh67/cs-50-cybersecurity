@@ -1,4 +1,4 @@
-The operating system and processes that are belong to the OS are these "common things". But there is a problem that, when OS executing commands or instructions from user, the risk of leaking information between dataflow is vital.
+,The operating system and processes that are belong to the OS are these "common things". But there is a problem that, when OS executing commands or instructions from user, the risk of leaking information between dataflow is vital.
 These "attackers" may want to read, modify or deleting somethings in the system. They can take advantages by vulnerabilities of these software to overrides or overwrites to file system.
 
 Attack types:
