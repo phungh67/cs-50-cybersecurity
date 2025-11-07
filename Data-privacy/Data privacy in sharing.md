@@ -55,3 +55,23 @@ With these challenges, fortunately, we have some method to ensure the privacy:
 
 ![[Linkage attack.png]]
 In the above figure, a sensitive record *s*  must be protected to ensure the privacy. But the linkage attack can exploit this information by cross-referencing. Let's take a record *i'* from the identification dataset that might be bought (like the voting information during some election?) then combining it with a record *d* of the disclosed set (the original set with all sensitive information hidden) (and this set can be release in the internet, a prize from some hackathon,...). If the record *s* is uniquely enough, the sensitive information can be exposed [Example](https://nvlpubs.nist.gov/nistpubs/ir/2015/NIST.IR.8053.pdf)
+
+## Measuring the threat of re-identified
+[Article](https://bmcmedinformdecismak.biomedcentral.com/articles/10.1186/1472-6947-12-66)
+As described earlier, an attacker can reassembly the data of a person if he/she got both disclosure set (pretty easy) and the identification set (can be purchased).
+![[Threat of re-identification.png]]
+As in the illustration above, there are 9 unique records (highlighted) in the disclosure set and we also have 6 unique records in the ID set. The linkage attack will scan the disclosure and the ID, performed some matching function and eventually exposed the identity of a voter (e.g Alan Smith, a male birth in 1962, will likely have test result -ve). The purpose of linkage is not to expose someone identity but to embarrass and publish the medical record (which contains sensitive information about health status as well as disease). As in this example, if the uniqueness of the record "Alan Smith" is standout (there is only 1 record matched in the disclosure set), the attack was successfully exposed his medical status (-ve).
+
+In order to do that, we have some formular to calculate the probability of the successfully linkage attack with the quasi-identifier.
+
+Let $N$ and $n$ be the number of records in the voter registration list and the disclosed (sample) data set respectively, $K$ and $u$ denote the number of non-zero equivalence classes in the voter registration list and the disclosed data set respectively, and $F_i$ and $f_i$ denote the size of the $i^{th}$ equivalence class in the voter registration list and the disclosed data set respectively, where $i \in \{1, \dots, K\} \text{ (or } \{1, \dots, u\} \text{ respectively)}$. ## Measuring uniqueness One can measure the conditional probability that a record in the voter registration list is unique given that it is unique in the original data set by: 
+$$ \lambda_1 = \frac{\sum_i I(f_i=1, F_i=1)}{\sum_i I(f_i=1)} \quad (1) $$
+where $I$ is the indicator function. For example, $I(f_i=1, F_i=1)=1$ is one if the sample equivalence class is a unique as well as the corresponding population equivalence class, otherwise it is zero. 
+However, as a risk metric for the whole data set that will be disclosed, $\lambda_1$ can be misleading. In our example, 2 out of 9 sample unique records were population unique, giving a risk of $\lambda_1 = 0.22$. However, out of the whole data set only 2 out of 14 records are at risk, therefore the data set risk should be 0.14. To give a more extreme example, consider a 1000 record data set where there are only two unique records and they are both also unique in the voter registration list. In this case $\lambda_1=1$ indicating that *all* records are at risk, when in fact only 2 out of 1000 records are at risk. A more appropriate risk metric would then be: $$ \lambda_2 = \frac{\sum_i I(f_i=1, F_i=1)}{n} \quad (2) $$
+In the 1000 record example above, this would give a risk of $\lambda_2 = 0.002$ and for the example of Figure 1 it would be $\lambda_2 = 0.14$ for the original data set, which corresponds to what one would expect intuitively. The risk metric $\lambda_2$ approximates the proportion of records in the voter registration list that are unique under an assumption of sampling with equal probabilities [54]. The $\lambda_3$ measure is the proportion of records in the voter registration list that are unique: 
+$$ \lambda_3 = \frac{\sum_i I(F_i = 1)}{N} \quad (3) $$The value for $\lambda_3$ in our example of Figure 1 would be 0.15 since six records in the voter registration list are unique. [Source](https://bmcmedinformdecismak.biomedcentral.com/articles/10.1186/1472-6947-12-66)
+
+## Limitations
+- All these theories are just statical assumption, therefore can be changed under different conditions: different disclosure set, different quasi-identifier,...
+- As stated before, choosing a good quasi-identifier set to measure the risk is very hard.
+![[The variation of quasi-identifier.png]]
