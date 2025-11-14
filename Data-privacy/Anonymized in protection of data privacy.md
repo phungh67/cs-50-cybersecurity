@@ -1,4 +1,4 @@
-#data #security 
+ki#data #security 
 
 As in the last lecture about [[Data privacy in sharing|Risk in data sharing]], there are several metrics to determine if the data is at risk. 
 The most common way to reinforce the data security is *k-anonymity*.
