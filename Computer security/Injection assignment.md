@@ -71,6 +71,13 @@ The payload might look like this:
 admin' AND (SELECT IF(SUBSTRING(Password, 1, 1) = 'a', SLEEP(5), 0) FROM Table_Users WHERE Username='admin') --
 ```
 This payload aims to guest the exact password of the admin. If the hash password contains character a, it will SLEEP 5, and by monitoring the response time, they can know whether this character exists or not. This is also called as **blind data extraction** because it guesses character by character.
+So the blind attack is also used to find which tables are existing in the database. Because there are 2 main things needed to guesses: the length of table's name and the characters in these tables. And to extract the data, there is a few prerequisites:
+- An automation tool (like `sqlmap`) to reduce the manual labor.
+- Some knowledge about the database engine: information of tables, schemas and views are stored in `information_schema` (for `MySQL`, `PostgreSQL` and `Microsoft SQL Server`), while `Oracle` uses `all_tables` and `Sqlite` uses `sqlite_master`
+```SQL
+admin' AND (SELECT LENGTH(name) FROM sqlite_master WHERE type='table' LIMIT 1) = 5 --
+admin' AND (SELECT SUBSTRING(table_name, 1, 1) FROM information_schema.tables WHERE table_schema=database() LIMIT 1) = 'u' --
+```
 >[!Data modification]
 >Depending on the specific database driver being used by the backend (for example, if a PHP backend is using `PDO` with multi-statements enabled, or specific Node.js driver configurations). Well this heavily depends on the engine, but attackers do not rest, they try to use as many minions as possible to attack!
 
@@ -95,3 +102,5 @@ export function checkUserPass(username: string, password: string): { UID: number
     }
 }
 ```
+
+Refer to actual attack here: [[Attack-SQL-inject]]
