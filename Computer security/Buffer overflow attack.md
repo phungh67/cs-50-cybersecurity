@@ -53,3 +53,17 @@ About the memory structure, we have:
 - heap memory, the dynamically allocated, with `malloc`, this part is larger than stack, but it grows toward the stack!
 
 So, we have 2 different sections grow toward each other, that is how the problem rose.
+
+# 3. Exploited
+
+The most common way is to control the buffer, point it to the wanted code piece. The attacker had setup some instructions in the "fake" return address of the code.
+
+# 4. Counter
+
+Best method first: defensive programming, always remember to check the boundary before performing any computation, only allow a fixed length of input.
+
+Canary is a quite common method. That is we put a variable named "Canary" in between the return address, for example, between the local variables and frame pointer section. So that if any attackers tried to overflow some value within the variables and try to overwrite the return value, the value of canary was changed also. And to do so, the canary must pass the pre-check.
+
+With that, we can make sure that there is no illegal modification during the execution.
+
+But, attacker always wants to enhance the attack method. They even can try to exploit the code to by pass the canary by completely not touching it.
