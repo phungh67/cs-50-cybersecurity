@@ -19,3 +19,17 @@ Analysis:
 - VBS
 - Registry information within Windows operating system.
 - MS Outlook API.
+
+# 1. Spread mechanism
+
+**Primary way**: Sending itself as an attached `.txt` file to all recipients in MS Outlook address books.
+**Secondary way**: with IRC installed, send phony `.htm` file to users connecting to a web server to download this worm as an executable file.
+
+>[!Notes]
+>This worm is not harmless, it tried to steal people password???
+
+Reasons:
+- Old windows default allow script to be executed.
+- Window can configure to now show the extension of the file.
+- People in general trust people that they know to be trustworthy, and of course, these people did not know their machines were infected either.
+- Social engineering effect: love and curiosity.

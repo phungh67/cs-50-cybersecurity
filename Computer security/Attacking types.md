@@ -1,4 +1,6 @@
 
+# 1. How do you define an "attack" scenario?
+
 Let's start with the definition about "attacking", how can we define what can be called as an attacking scenario?
 In term of "computer security", an **attack** is some action that targeted a system (computer system) and exploited that system's weakness in order to take some advantages. Not all attacks must be fatal, it can be a small attack with electricity outage, a simple rounding bugs or something slowing down the system. The purposes of these actions are also varies. To embarrassed the system's owners/developers? Or simply to prove that the targeted system is not invincible as it looked to be.
 Take an example of these code:
