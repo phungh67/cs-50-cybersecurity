@@ -67,3 +67,39 @@ Canary is a quite common method. That is we put a variable named "Canary" in bet
 With that, we can make sure that there is no illegal modification during the execution.
 
 But, attacker always wants to enhance the attack method. They even can try to exploit the code to by pass the canary by completely not touching it.
+
+Secondly, we have the data execution prevention - we separate memory zone, like, any zone can not be both writable and executable. So that even if the attackers can somehow malformed the code to run instructions on their own, it cannot be executed. But once again, the adversaries can still find somewhere to attack.
+
+In the system, we have a lot of code in the libraries (the system one). And this time, attackers try to drive these program to return to system libraries (C), but assume there are 3 things:
+- Can manipulate the code pointer.
+- The stack must be writable.
+- Know the address of a "suitable" library.
+
+Address Space Layout Randomization - try to implement the the layout of memory in a randomly way, try to force the attackers in a blind trap, that they really don't know how to guess or how to predict which part in memory they should attack:
+- Randomized the stack and the start address of the code (stack and base).
+- But let's assume that functions, variables are still at the same relative offset from the start address. (i.e, a function with 6 params still takes 6 * 32 bytes?).
+- So that, only need a single code pointer.
+
+# 5. Summary
+
+In conclusion, the adversary's intention is: trying to inject malicious things into the code. If it wasn't worked, trying to change the control flow of the program instead to make it execute "malformed" instructions.
+
+Also, for overflowing stuff:
+- Variables can be overwritten as a result of this action (because they lie on the same stack).
+- Other addresses (function, control method,...).
+- Etc
+
+```C++
+get_medical_info() {
+	boolean authorized = false;
+	char name[10];
+	read_from_network(name);
+	
+	if (authorized)
+		show_medical_info(name)ö
+	else
+		printf("You are not allowed to do this.\n");
+}
+```
+
+In the above example, an overflow from variable `name` can cause the value of `authorized` to change. Because it is only `false` if the value of that address equals to zero, otherwise, it will be `true`, then medical data (very sensitive) can be exposed.
