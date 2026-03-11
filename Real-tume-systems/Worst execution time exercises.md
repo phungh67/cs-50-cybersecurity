@@ -65,7 +65,7 @@ int Calculate (int Z) {
 
 ---
 >[! First question]
->Using Shaw's method to estimate the WCET for function `Calculate()`in term of Z?
+>Using Shaw's method to estimate the WCET for function `Calculate()`in term of Z? Assume that addition and subtraction are equal to 4 units of time?
 
 From top to bottom, for each condition check, it also costs too. Then we have this procedure:
 - Initialize of `R`= 1
@@ -74,6 +74,12 @@ From top to bottom, for each condition check, it also costs too. Then we have th
 - Lastly, the return costs 1.
 
 $1 + 1 + 1 + 2 + WCET + 2 + WCET + 4 + 1 + 4 + 4 + 1$
+
+But the $WCET$ here is not the same, but the recursive one, so the final formula is:
+$$
+WCET(Z) = 23 + WCET(Z - 1) + WCET(Z - 2)
+$$
+With the initial values of $WCET(0)$ and $WCET(1)$ are 4 and 5 respectively.
 
 
 ---
@@ -124,6 +130,15 @@ Assume the following cost:
 
 a. Calculate WCET following the Shaw's method. WCET is about 73 units, function is called with parameter x is in range [1, 14] and y is in range [7, 63] (range value of x and y).
 
+>[! Analyze]
+>This contains a `while` loop, which always execute the condition check more than the actual value of evaluated variable. For example, with the condition `x != 0` and `x /= 10`, then the condition check will be executed even when the x equals to 0.
+
+So we have two parameters here, the maximum value of the loop and the maximum value of the bitwise operator, let call them b and u.
+
+We have the `WCET`:
+$$ result + shift_0 + result + (b + 1).(compare) + b.inside_{loop} + u.inside_{bitwise}
+$$
+
 Take out: to maximize iterations of while loop, the index (greatest) of set bit in x. Also maximize the if-condition by having as many set bits in x as possible.
 Given x belongs to [1,14], means [0001...1110], it will take at most 4 iterations, with 5 while loops. Max population count is 3 (cannot 0 at the first bit), so we have 1110, 1101 and 1011.
 
@@ -132,6 +147,6 @@ Inside the while block, we have a bitwise AND, so it should be 4(assign, and, if
 `Total = 2*1 + 1 + 5*2 + 4*(1 + 1 + 2 + 1 + 2 + 1 + 2) + 3 * (1 + 5) + 2 = 73`
 
 b. What is the value of x in range of [1, N] if the WCET should not exceed 67 units?
-if the number of while loop iterations is 3 or less, WCET is reduced by 1 * (assign, and, compare, assign, shift, assign, shift), which equals to 10. So it always is OK to meet the deadline
-if the number of loops still be 4, we should reduces the population count, since each will contribute 1 * (assign, multiply), equals to 6, so if the population is less or equal to 2, it still be ok. Hence, the bit no 3 must be set and each bits 2 to 0 should have a population count of 1, leaving only these values: 1100, 1010, 1001.
-if we still use the original range, it included 1011 (not in the allowed) because it will contribute a significant value to WCET.
+- If the number of while loop iterations is 3 or less, WCET is reduced by 1 * (assign, and, compare, assign, shift, assign, shift), which equals to 10. So it always is OK to meet the deadline. So that, to be short, if only 3 iterations, that's mostly good for all cases.
+- If the number of loops still be 4, we should reduces the population count, since each will contribute 1 * (assign, multiply), equals to 6, so if the population is less or equal to 2, it still be ok. Hence, the bit no 3 must be set and each bits 2 to 0 should have a population count of 1, leaving only these values: 1100, 1010, 1001.
+- If we still use the original range, it included 1011 (not in the allowed) because it will contribute a significant value to WCET.
