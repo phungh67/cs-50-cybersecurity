@@ -1,5 +1,46 @@
 
-WCET analysis: we will find out how long does it take for the program to travel with the longest path in its execution flow.
+# 1. Definition
+
+>[! Shaw's Methods]
+>The estimated WCET is the execution time of the longest structural path through the program.
+
+# 2. A simple example
+
+```C++
+for (i=1; i <= N; i++){
+	if (A > K)
+		A = K - 1; // T1
+	else
+		A = K + 1; // E1
+		
+	if (A < K)
+		A = K; // T2
+	else
+		A = K - 1; // E2
+}
+```
+
+In the above example, we have a loop structure with some condition check. There are two main branches: one to check if A is larger than K and the other branch is to handler is A less than K.
+
+>[! Notes]
+>The estimated WCET (WCETe) is the execution time of the ***longest structural*** path through the program.
+
+For example, the formula for this example is:
+$$
+WCETe = N * (WCET(loop) + WCET(I_1) + max(WCET(T_1), WCET(E_1)) + WCET(I_2) + max(WCET(T_2), WCET(E_2)))
+$$
+
+There are several things to consider:
+- The total size of the loop (N).
+- The cost of the loop command itself (not the total, but the cost to invoke the loop).
+- The cost of first condition (A > K).
+- Worst path of first condition (True or Error), worst path of second condition (True of Error).
+
+# 3. Exercises
+## 3.1 Theory practice
+
+>[!Problem 1]
+>WCET analysis: we will find out how long does it take for the program to travel with the longest path in its execution flow.
 
 **Problem**: consider the famous Fibonacci function `Caculate()`
 ```C
@@ -23,16 +64,17 @@ int Calculate (int Z) {
 	- All other language constructs can be assumed as 0 time units to execute.
 
 ---
-So the challenge of this problem is the line `R = Calculate(Z-1) + Calculate(Z-2)`.
-First, we have *assign*. `call`, a *subtraction*, an *addition*, another `call` and lastly, a *subtraction*.
+>[! First question]
+>Using Shaw's method to estimate the WCET for function `Calculate()`in term of Z?
 
-So we'll have: `1 + 2 + WCET(calcuate) + x + x + 2 + WCET(calculate) + x`
-In total, it is: `5 + 3x + 2WCET(Calculate)`, let replace `WCET(Calculate) = w(n)`
+From top to bottom, for each condition check, it also costs too. Then we have this procedure:
+- Initialize of `R`= 1
+- Perform condition check (twice) because we consider the worst case.
+- Assign value for `R`costs 1, the addition of two recursive functions is 4, each function will cost  2 plus itself, and additionally 2 subtracts.
+- Lastly, the return costs 1.
 
-we have `w(0) = 1 + 1 + 1 + 1 = 4`, also `w(1) = 5`
-For all `w(n>1) = 4 + 5 + 3x + w(z-1) + w(z-2)`
+$1 + 1 + 1 + 2 + WCET + 2 + WCET + 4 + 1 + 4 + 4 + 1$
 
-In conclusion, we have `9 + 3x + w(z-1) + w(z-2) for z > 1, with w(n) is WCET(fib(n))`
 
 ---
 2. What if the function `main()` calls `Calculate()` with value z = 5?
@@ -51,7 +93,7 @@ We should have; `1 + 1 + 2 + w(5)` (ans: 188)
 
 	We have the formula is `104 + 21x` for the `w(5)`, so do the Math,...
 
-### Old exam problem
+## 3.2. Old exam problem
 Consider the following C program code for the function **ShifftXY**
 
 ```C
