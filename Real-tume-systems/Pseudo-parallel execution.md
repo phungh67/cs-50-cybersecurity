@@ -64,7 +64,7 @@ It is simpler than RM, as long as the $\sum_i^n \frac{C_i}{T_i}$ is less than 1,
 No, just test is not enough, the formula is just the sufficient test, a no cannot mean that there is not possible algorithm for the task set, and also, the "Liu and Layland's", which draws from the Processor Utilization Analysis (PUA), suitable for BOTH static and dynamic, so there is also something that were not covered.
 
 So we have another test Response Time Analysis (RTA).
-$$  R_i^{n+1} = C_i + \sum_{v_j} [\frac{R_i^n}{tau_j}] * c_j $$
+$$  R_i^{n+1} = C_i + \sum_{\forall \tau_j} [\frac{R_i^n}{T_j}] * c_j $$
 To be short, we take every task, to inspect the Response Time $R$ which is calculated by take the execution time of the current task $c_i$ plus the total time of interference tasks (whose priorities are far higher than current task). 
 
 In the interference element, we take the ceiling of the previous Response Time, divided by the period of higher task then multiply the result with execution time of that higher one.
@@ -83,33 +83,39 @@ It can be considered as a generalization of the rate-monotonic scheduling, becau
 
 This kind provide exact feasibility test , optimal among static task with constraint: $D_i$ $\le$ $T_i$
 
+>[! Notes]
+>If for all tasks in the task set, if there is any task (or all) has $D_i \le T_i$ the Process Utilization Analysis (the formula from Liu and Layland) cannot prove the feasibility for the task set to be scheduled. The Response Time Analysis must be used.
 
 
-We have these tasks below with $C_i$, $D_i$ and $T_i$ as following: [2,5,10], [4,9,12] and [?,8,14] with $\tau_i$
+### Example
 
-Assume that we have rate monotonic scheduling RM, Derive the largest possible WCET, $C_3$ for $\tau_3$ that all tasks meet their deadline?
+![[scheduling-example-rm.png]]
 
-We have $$ \forall i, D_i \le T_i; \exists i, D_i \ne T_i $$
-PUA (Processor Utilization Analysis) is not valid, RM scheduling, so we have RTA or HPA (Response Time Analysist and Hyper Period Analysis)
-RM pros: $\tau_1$ > $\tau_2$ > $\tau_3$ (since $T_1$ < $T_2$ < $T_3$)
-$$  R_i^{n+1} = C_i + \sum_{v_j} [\frac{R_i^n}{tau_j}] * c_j $$
-(with $R_i^0=C_i$) so we have $R_1$ = $C_1$ = 2 $\le D_1$ =5 (OK)
-With $R_2$ we have $R_2^0$ = 4,  $R_2^1$ = 6 and $R_2^2$ = 6, convergence with $R_2$ = 6 $\le D_2 = 9$, acceptable
+In this case, we have a set of 3 tasks and the goal is:
 
-For task 3, we have 
-$$ R_3^{n+1} = C_3 + [\frac{R_3^n}{tau_1}] * c_1 +  [\frac{R_3^n}{tau_2}] * c_2 $$
-Try with 1, since the Deadline for 3 is 8, we would have 1 is sufficient since response time for task 3 is convergence within the iteration 2 (1 and 2). Try with 2, we have the exactly result $C_3=2$ is the maximum because response time $R_3$ converged with iteration 1 and 2, with value of 8, equals to the deadline, hence we cannot push further.
+>[! Question a]
+>Find the largest integer value of $c_3$ such that all tasks meet their deadline.
 
-DM pros: $\tau_1$ > $\tau_3$ > $\tau_2$ (since $D_1$ < $D_3$ < $D_2$)
-$$ \forall V_i; D_i \le T^{min} = 10 => R_i^{n+1} = C_i + \sum_{v_j} [\frac{R_i^n}{tau_j}] * c_j $$
-Because of min, we have $[\frac{R^{max}}{T^{min}}] = 1$ 
-$R_1 = C_1 = 2 \le D_1 = 5$ 
-$R_3 = C_3^{max} + C_1 \le D_3 => C_3^{max} = 6$
-Also have $R_2 = C_2 + C_1 + C_3^{max} \le D_2$
-We have to choose the smaller value, if not, task 2 can not make its deadline (because, these trio must be schedulable and meet their deadline respectively).
+We have $D_i \le T_i \forall i$ so that the **Process Utilization Analysis** is not applicable. The only method to determine this task set can be scheduled or not is **Response Time Analysis**.
 
+Because this system is RM-based, so the priorities for all these tasks will be $\tau_1 < \tau_2 < \tau_3$
 
-Consider a real time system with periodic task s and a run time system that employs scheduling on uniprocessor. All tasks arrive the first time at time 0.
-We have the table with $C_i$, $D_i$ and $T_i$. Using EDF for $C_3$ where $5 \le C_3 \le 7$, is it possible, why or why not
-[2,5,5], [3,6,10] and [?, 2$C_3$, 20]
-For all task, we have the deadline is less that the period, and also, exists one deadline that different with the period. Furthermore, EDF, so PUA (process utilization analysist) is not valid. Dynamic priority leads to PDA or HPA
+With the formula to calculate the response time $R$, for each task, we have:
+
+- For $\tau_1$ we have $R_1 = C_1$ and equals to 2, less than deadline, good.
+- For $\tau_2$ since it has lower priority than $\tau_1$, the response time will be: $$ R_2^{n + 1} = c_2 + \lceil \frac{R_2^n}{c_1} \rceil * c_1 $$
+	Luckily, with this one, first $R_2⁰$ = $c_2$ so that we have $R_2¹$ = 6 and also $R_2²$ = 6, convergence happened and it also less than the $D_2$.
+- For $\tau_3$, the generic way is to "backtrack", first, choose $c_3 = 1$ then calculate, if the convergence is still less than $D_3$, increase the value of $c_3$. And of course, we pick the maximum value of it.
+
+>[! Question b]
+>Also the same requirement with above question, but this time, the system uses Deadline monotonic.
+
+Since Deadline monotonic is applied, we have $\tau_1 < \tau_3 < \tau_2$
+
+Same as before, we still have task 1 as the highest priority and it totally fine.
+
+With task 3, because we want the largest possible value of $c_3$, since the largest possible value is as the same as the deadline, so applying the formula of Response time, we have $R_3^{max}$ = $D_3$ then we have $c_3^{max}$ equals to 6.
+
+But from task 2, we also have another value (since we also want the maximum value of task 3, and task 2 is interfered by task 3, then task 2 response time should be max as well). With that we have $c_3^{max}$ equals to 3.
+
+Pick the minimum of it, we have 3 (because task 2 must converge to meet the requirements).
