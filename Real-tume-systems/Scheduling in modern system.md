@@ -1,4 +1,44 @@
+
+>[! Definition]
+>This exercise type is about the scheduling method, scheduling analysis of a practical system (with some constraints). First thing first, try the feasible test, do the math, and write some conclusion.
+
+# 1. Implementation of scheduling
+
+>[! Cyclic executive]
+>The implementation of scheduler is relatively simple, because the next task is chosen from a look-up table.
+>But since we need a table first, it must be generate off-line and more important: **before** the system is in mission (and of course, to make such a thing, a more advanced algorithm must be used).
+
+This is the most basic example about how to arrange tasks in a system but of course, this kind of implementation has many flaws, one of the most oblivious is "the system cannot react with outside impacts".
+
+>[!Pseudo-parallel execution]
+>In this case, scheduler has some sophisticated algorithm to active it regularly on each decision time. Also, the scheduler must be able to handle protocols for avoiding priority/deadline inversion when taking account into a shared resource.
+
+# 2. When is "decision" made?
+
+To decide which task should be executed in the CPU, there are two main ways:
+- **Non-preemptive** scheduling, which picked the next task when no task executes. Also, in this case, mutual exclusion can be automatically guaranteed (since each task will run from the beginning till the end). In this case, we consider about Worst-Time-Execution Analysis [[Worst execution time exercises| Theory]].
+- **Preemptive** scheduling, in which system's decision changes as soon as states change. The critical selection process (mutual exclusion) must be guaranteed by semaphore. The Worst-Time-Execution analysis became complicated due to the state in caches and pipeline will change at a task switch.
+
+# 3. Schedulable, feasible - When and How?
+
+>[! Feasible]
+>A schedule is said to be feasible if it fulfills all application constraints for a given set of task (meets the deadline, convergence,...).
+
+>[!Schedulable]
+>At set of tasks is said to be schedulable if  there exists at least one scheduling algorithm that generates a feasible schedule.
+
+
+To determine these metrics, we have several test to conduct:
+- **Hyper period analysis** [[Hyper Period Analysis (HPA)]] simple, we look into an existing schedule, we must make sure there won't be any task to exceed its deadline
+- **Processor utilization analysis** that the fraction of processor time that is used for executing the task set must not exceed a given bound.
+- **Response time analysis** calculate the worst-case response time for each task (for each iteration) that should not exceed its deadline.
+- **Processor demand analysis** the accumulated computation demand for the task set under a give time interval must not exceed the length of the interval.
+
+
 ## Example 1: Cyclic executive
+
+*more example*: [[Hyper Period Analysis (HPA)]]
+
 **Problem**: Consider a real time system with two specific periodic tasks that should be scheduled using a time table. The parameters for two tasks are given below. Both tasks arrived at time 0
 a. Construct a time table for the execution of the two tasks. These tasks are allowed to preempt each other.
 b. Does your schedule constitute the best possible schedule or does there exist a superior one.
@@ -11,6 +51,8 @@ a. we have this time table, which can be understood as:
 ( task1-1[0,2], task1-2[2,6], task1-3[6,8],...)
 
 ![[Scheduling diagram of tasks.png]]
+
+In this problem, we can see that task can preempt each other based on which one has earlier deadline. In the time of task $\tau_1^4$, we see that it had a deadline of 16 while $\tau_2^3$ had deadline of 18.
 
 **Problem**: Having 3 task, which are [1,7,7]; [1,14,14] and [4,18,18] with execution time, deadline and period respectively. Can we guarantee the schedulability of the task set using the RM scheduling algorithm? (RM is rate-monotonic which is, task's priority is inversely proportional to its activation period).
 
