@@ -31,3 +31,5 @@ With the EDF - Earliest Deadline First, which task has the closet deadline will 
 First, $\tau_1$ arrived with offset = 0 and deadline 7, which won because $\tau_2$ also arrived at 0 but had deadline of 12, also, $\tau_4$ deadline was 1 + offiset (which was 5, so it would be executed right after $\tau_1$, but it only arrived at 3).
 
 But in the time of 8, the system's state changed, because $\tau_4$ arrived. At that time, the deadline of $\tau_4$ was 4 while $\tau_1$ was 7, so the $\tau_4$ won, $\tau_1$ was preempted. Similarity, we have $\tau_2$ won after $\tau_1$ and only after both task, we were able to execute $\tau_3$ with some preempt since the deadline of $\tau_4$ won (since it only takes 1s of deadline and 1s of execution).
+
+Also, with the EDF to test the feasibility of scheduling, on the formula is not enough (take some formula from Liu and Layland's in [[Pseudo-parallel execution]]) (but take the right hand side to one). If all tasks have the constrained deadline (less than period) we must go to this [[Feasibility-test-single-processor]]

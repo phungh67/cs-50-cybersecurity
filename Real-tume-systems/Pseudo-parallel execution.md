@@ -1,6 +1,4 @@
 
-![[Pasted image 20260312155156.png]]
-
 # 1. Task execution
 
 - Static assignment: we have **Rate monotonic** and **Deadline monotonic**
