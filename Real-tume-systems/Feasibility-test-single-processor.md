@@ -38,4 +38,36 @@ $LCM(T_1, T_2, ... T_i)$ and the bound of the synchronous task set by Baruah, Ro
 In summary, for every synchronous task set, we can use the LCM, but if we have U $\le$ 1, we can use the least upper bound $L_{BRH}$ so that we have $L_{max} = min(L_{BRH}, L_{LCM})$
 
 Summarize for single-processor scheduling
-![[Pasted image 20260312220659.png]]
+![[feasibility-test-with-several-type-scheduler-algorithm.png]]
+
+# 4. Example
+
+>[! Notes]
+>For EDF process-demand, there cannot exist an interval length of L in which this task set can be scheduled if the processor demand in that interval exceeds L.
+
+![[edf-process-demand.png]]
+
+In this case, we could not use the $L_{BRH}$ since it requires to know all the Utilization and Deadline (in the formula). So only feasible way to use is $L_{LCM}$ which equals to 20.
+
+In this interval $L=20$, we have these control points (L):
+- With $\tau_1$ :  5 , 10, 15, 20
+- With $\tau_2$: 6, 16
+- $\tau_3$ is a little unique, since we have not known the exact value of $D_3$, but we know that it equals to $2C_3$ and also $5 \le C_3 \le 7$, then we have the control point of $2C_3$ (only one).
+
+Summary, the array of control points for this task set is: ${5,6,10,2C_3,15,16,20}$
+
+Remember the formula of $N_i^L.C_i$ we are going to calculate each value for each task (in each L, from 5, 6, ...)
+
+Here, we have unidentified value of $C_3$, the simplest way is backtrack, try with each value from 5 to 7 (5,6,7).
+
+![[Pasted image 20260313194437.png]]
+
+In this image, we assumed (at earlier points) that $C_3$ cannot be less than 5 (due to the constraint) then we continued to calculate.
+
+When we encountered a case that processor-demand could not be met, we changed the value of $c_3$ to another (5 to 6, but with that, we have a new control point, and must calculate it too).
+
+![[Pasted image 20260313195336.png]]
+
+Similarly, we calculated the processor demand at the new control point, when it was not sufficient, increased the value of $c_3$ again (which led to another new control point), then repeated these steps again.
+
+But at last, at the very end point, we had an insufficient result, which we can proved that it could not be satisfy with any value of $c_3$ as the problem statement constraint. So that we did not need to calculate the last point (20).

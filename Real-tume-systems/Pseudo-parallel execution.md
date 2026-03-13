@@ -117,3 +117,7 @@ With task 3, because we want the largest possible value of $c_3$, since the larg
 But from task 2, we also have another value (since we also want the maximum value of task 3, and task 2 is interfered by task 3, then task 2 response time should be max as well). With that we have $c_3^{max}$ equals to 3.
 
 Pick the minimum of it, we have 3 (because task 2 must converge to meet the requirements).
+
+>[! Notes]
+>For a task set to be schedulable with RM/DM there cannot exist an instance of a task execution in the scheduler where the worst-case response time of the task exceeds the task's deadline.
+
