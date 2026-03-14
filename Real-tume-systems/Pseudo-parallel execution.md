@@ -67,6 +67,11 @@ To be short, we take every task, to inspect the Response Time $R$ which is calcu
 
 In the interference element, we take the ceiling of the previous Response Time, divided by the period of higher task then multiply the result with execution time of that higher one.
 
+But there is also a case that the lower priority task was not only blocked by the execution of higher tasks but also the time that the task lower that the said task in the critical region section.
+$$
+R_i = C_i + B_i + \sum_{\forall j \in hp(i)} \lceil \frac{R_i}{T_j} \rceil . C_j
+$$
+
 
 ## 4. An example where Liu & Layland's is not enough
 
@@ -121,3 +126,21 @@ Pick the minimum of it, we have 3 (because task 2 must converge to meet the requ
 >[! Notes]
 >For a task set to be schedulable with RM/DM there cannot exist an instance of a task execution in the scheduler where the worst-case response time of the task exceeds the task's deadline.
 
+### Example B: blocking in Response Time Analysis (Advanced Part)
+![[Pasted image 20260314130043.png]]
+
+This problem is more challenge than the normal one. Since in the normal RTA, we only care about how long a task will be interfered by a higher priority task, but in this case, we also need to inspect the blocking factor of lower task. That is, after a task $\tau_i$ entered and left the critical selection, surely the lower task (which accessed the same region) also took a while to complete.
+
+In this case, $\tau_1$ accesses two critical selection region $S_1$ and $S_2$, which leads to the interference from $\tau_2$ and $\tau_3$.
+
+With $\tau_1$, we have two value of $B_i$ to represent the blocking time 1 and 2, but since we must make the Worst-Case-Estimation-Time, we take the maximum value of 2
+
+$R_1 = C_1 + \max(H_{S1}, H_{S2}) = 2 + 2 = 4 \le D_1 = 4$
+
+With $\tau_2$, this task is preempted by $\tau_1$ - a higher priority task, and also has a lower task $\tau_3$ to the blocking factor
+
+$R_2 = C_2 + B_2 + \lceil \frac{R_2}{T_1} \rceil C_1$
+
+With $\tau_3$, since it is the lowest priority task in this set, it could not be blocked. Then we use the "original" formula without $B_i$ factor.
+
+$R_3 = C_3 + \lceil \frac{R_3}{T_2} \rceil C_2 + \lceil \frac{R_3}{T_1} \rceil C_1$
