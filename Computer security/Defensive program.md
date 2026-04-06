@@ -1,5 +1,5 @@
 
-At first, we already have 2 background concepts: [[Cryptography]] (to protect information in-transit, at-rest) and the [[UNIX security]], the built-in protecting mechanism of the operating system itself. But we also have some active responses that we can do it at will
+At first, we already have 2 background concepts: [[Cybersecurity/cs-50-cybersecurity/Computer security/Cryptography]] (to protect information in-transit, at-rest) and the [[UNIX security]], the built-in protecting mechanism of the operating system itself. But we also have some active responses that we can do it at will
 
 # 1. Forewords
 
