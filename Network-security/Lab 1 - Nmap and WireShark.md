@@ -210,4 +210,4 @@ For me, the one thing that I could remember is that a firewall is super importan
 3. We need to do four tests for each step.
 4. For questions 2 and 4, do we need to paste some scanning results for those questions?, I doubt that, but tomorrow, we can scan again, then show the TAs.
 5. For question 7: Maybe we need to do the test in the virtual machine, rather than just give an approximate time. Already test. A full scan take 48 minutes (first 1024 ports) and 3 hours 49 minutes if full ports.
-6. For question 8, do we need to run the command in the virtual machine and paste the result for Windows and Linux? I really don't know if can scan Window, since the VMs are isolated?
+	1. For question 8, do we need to run the command in the virtual machine and paste the result for Windows and Linux? I really don't know if can scan Window, since the VMs are isolated?
