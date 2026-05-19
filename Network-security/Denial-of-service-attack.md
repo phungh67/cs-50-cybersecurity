@@ -87,8 +87,45 @@ There are many methods to mitigate, as mentioned before:
 - Perform rate limiting.
 - Monitoring and whitelisting,...
 
-One of many way is uRPF - Unicast Reverse Path Forwarding.
+## One of many way is uRPF - Unicast Reverse Path Forwarding.
 
 - Strict: if there is any packet came from an IP address, through any interface in this router, if there is a patch to reach that IP address, with the same interface, accept it, otherwise, it is a forged packet.
 - Loose: as long as there is a way to reach the sender's IP address in the route table (IRT), accept it, otherwise, malformed packet.
 
+## Remotely Trigger Black Hole RTBH - drop all traffics
+
+- Using the Border Gateway Protocol - BGP to drop traffics at network edges.
+- Victim announced it own attack via a special BGP tags 65535:666.
+- Edge routers will route all traffic to `Null0`.
+- This is a break glass option, since it really makes Denial Of Service work.
+
+## BGP Flowspec - distributes firewall rules via BGP
+
+- A  method to ship firewall to all nodes in the network via BGP.
+- The rule is match-action.
+- Complicated, prone to error but is still being widely adopted.
+
+## Scrubbing
+
+- When a server was attacked, the BGP anycast will route the incoming traffic that originally to that server, to the Scrubbing system first, where the malformed packets will be sanititzed then go to original server again.
+- The victim's prefix will be announced. Filtered packets were sent via GRE tunnel. (Generic Routing Encapsulation).
+
+## Host-level mitigation is the last barrier
+
+- `SYN` cookie.
+- `iptables` or `netfilter`
+- Some specialized hardwares.
+- Some application - reverse proxy.
+- `eBPF` - extended Berkerley Packet Filter.
+
+# Summary
+
+- Denial of Service attacks target network bandwidth, system resources or application resources.
+    - Mostly, they will come with reflection or amlification attacks and in form of distributed scenario.
+    - Botnets (compromised devices - such as IoT devices) are common since they are cheap and accessible.
+    - Multiple vectors, multiple terabits attacks are also common now.
+- Multi layers of defenses are recommended:
+    - `uRFP` to prevent IP spoofing.
+    - BGP-based like rule forwarding or RTBH can be done at ISP level, but come with trade-off.
+    - Scrubbing centers and cloud providers offer good uptime - with cost.
+    - `SYN` cookies and `eBPF` reduces memory exhaution, not for network congestion, but this is the last layer.
