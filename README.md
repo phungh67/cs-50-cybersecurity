@@ -1,7 +1,7 @@
 # 🛡️ Computer Systems & Cybersecurity Knowledge Base
 
-![GitHub last commit](https://img.shields.io/github/last-commit/phungh67/cs-50-cybersecurity?style=flat-square)
-![GitHub repo size](https://img.shields.io/github/repo-size/phungh67/cs-50-cybersecurity?style=flat-square)
+![GitHub last commit|170](https://img.shields.io/github/last-commit/phungh67/cs-50-cybersecurity?style=flat-square)
+![GitHub repo size|110](https://img.shields.io/github/repo-size/phungh67/cs-50-cybersecurity?style=flat-square)
 ![Markdown](https://img.shields.io/badge/Content-Markdown-blue?style=flat-square)
 ![Made for Obsidian](https://img.shields.io/badge/Made_for-Obsidian-7c3aed?style=flat-square&logo=obsidian)
 
