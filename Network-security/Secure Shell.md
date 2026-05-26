@@ -17,7 +17,7 @@ Before `SSH`, there are `telnet`, `rsh` and `rlogin` - methods to control, acces
 
 ![Anatomy of a SSH packet](ssh-packet-structural.png)
 
-All the payload (username, password, even details about access address, source address) will be compresed first.
+All the payload (username, password, even details about access address, source address) will be compressed first.
 
 Then it will be inserted between a padding payload (to match the supported size) and also supported by 2 variables: `pklt` and `pdl`- indicate the actual length of the payload and the padding length (for easier unpacking process).
 
@@ -29,11 +29,15 @@ $$
 
 All these properties will be hashed by the `MAC` (or called `HMAC`) message authorized controller - to create the signature, preserving data integrity.
 
-But, the interesting is, sequence number was never sent with the payload, it only was covered by the `MAC`. Otherwise, every properties, execept sequence number will be encrypted, with a little `MAC` at tail to form the packet:
+But, the interesting is, sequence number was never sent with the payload, it only was covered by the `MAC`. Otherwise, every properties, except sequence number will be encrypted, with a little `MAC` at tail to form the packet:
 
 $$
 Encrypted(pktl, pdl, compressed(payload)) || HMAC(seq\#, pktl, pdl, compressed(payload))
 $$
+
+>[! Notes]
+>A critical point in the image above is how the three different methods create the payload. The old `SSH`goes with encrypt and MAC, resulting in these 2 run in parallel, so in the receiver's side, it must decrypt the payload first, since the MAC created from plaintext. In the `TLS`case, since the hash first, a bad padding can lead to a side channel attack. So the best is encrypted first, hash anything output from the cryptographic process above and we are good to go.
+
 
 ## Authentication in Secure Shell
 

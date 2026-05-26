@@ -20,15 +20,15 @@ There are two modes of operation:
 - Ad-hoc mode: computes talk directly to each other.
 - Infrastructure mode: traffic goes through an access point (AP), most common, clients must form an association with the access point, protected with secure mechanisms: WEP, WPA, WPA2 and WPA3.
 
-## Security scop
+## Security scope
 
 Connection from a client machine to the Access Point has protection (WEP, WPA,...) but the connection from the Access Point to the Ethernet (a Switch or an AAA server) has no security at all.
 
 ### Basic security
 
-**Client must know the SSID to connect**. It is quite easy with broadcast access points, since just choose the one that is "legitimate and familiar". But some hidden access points as well. Just have one common name "Hidden Network". Only reveals after successfully connected to it. A little hard to discover the network, but oftherwise, the same with basic access points.
+**Client must know the SSID to connect**. It is quite easy with broadcast access points, since just choose the one that is "legitimate and familiar". But some hidden access points as well. Just have one common name "Hidden Network". Only reveals after successfully connected to it. A little hard to discover the network, but otherwise, the same with basic access points.
 
-**MAC address can be used as a filter** to only accept specific devices. Easy to be spoofed, hardly to do in the large environment (in which the number of devices can be hundreds or thoudsands).
+**MAC address can be used as a filter** to only accept specific devices. Easy to be spoofed, hardly to do in the large environment (in which the number of devices can be hundreds or thousands).
 
 **WEP - Wired Equivalent Privacy** designed to ensure confidentiality, access control and data integrity, but the algorithms and implementation were done by cryptographic amateurs.
 
@@ -44,7 +44,7 @@ Connection from a client machine to the Access Point has protection (WEP, WPA,..
 
 ### Dictionary attack
 
-Since the password from the WEP was used  to generate a shared key, and only used it with a small passphrases (5-9 characters) with MD5 hash, if both the clear text and cipher text are known
+Since the password from the WEP was used  to generate a shared key, and only used it with a small passphrases (5-9 characters) with MD5 hash, if both the clear text and cipher text are known, even further supported by [[Rainbow table]]
 
 WPA2 can do better by using 4096 hash rounds, also, the Rainbow table can be used in this attack, so the best advise is using an uncommon name for access point.
 

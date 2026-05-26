@@ -9,6 +9,12 @@ This section contains the revision about theoretical concepts. According with ti
 [[Cybersecurity/cs-50-cybersecurity/Network-security/Denial of service attack|Denial of service attack]] - attack with the aim of exhausting all resources of the servers - how to defense against it.
 [[Firewall]] - with these threats, how to take the firewall into protection, types of firewall, types of inspection,...
 [[Transport Layer Security - Cryptography aspect]] - about `SSL` and `TLS` - architect and what would be sent during that process.
+[[Intrusion Detection System]] - a system to detect abnormal traffic, comes with network based and host based. Works closely with firewall to form a strong defense layer.
+[[Secure Shell]] - a protocol and implementation to access machines remotely.
+[[Wireless LAN]]  - secure the Wireless network, with `WEP`, `WPA`family.
+[[IPsec]] - IP security, most commonly in the VPN site to site.
+[[Remote Authentication Kerberos]] - A third party authentication system with ticket mechanism.
+[[Link Layer Security]] - almost last layer, with `ARP`, MAC and even `DNSSEC`
 
 # 2. Laboratories
 
