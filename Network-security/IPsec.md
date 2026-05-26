@@ -88,4 +88,4 @@ All content, included the header would be hashed to create the integrity stamp.
 
 Speficy a one-way relationship between sender and receiver. Also, the Security Parameters Index SPI tells under what SA a receiver packet should be processed
 
-![alt text](image.png)
+![IPsec Summary](ipsec-summary.png)
