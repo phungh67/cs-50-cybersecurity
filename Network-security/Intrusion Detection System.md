@@ -136,3 +136,31 @@ The disadvantage: The attackers can forge a fake packet to attack the system, be
 And the most challenging question is how to handle the packet if a new handshake is seen. Choose the new, or choose the old one?
 
 ![[Pasted image 20260523163547.png]]
+
+## Example question from previous exam
+
+In this scenario, we have some thing like this:
+
+![Sceanrio](ids-previous-exam.png)
+
+Between the path of attacker (compromised machine) and a router, we have a IDS server. The purpose of IDS server, of course, is to detect the abnormal traffic in the system.
+
+Clarify the answer first.
+
+For example, a rule in the IDS may look like this:
+
+```Bash
+alert tcp 10.0.2.0/24 any -> any 80 (msg:"forbidden port";)
+```
+
+Which means, for any traffic (from) `10.0.2.0/24` from any port, to any other IP addresses in port 80, alers the system with message: "forbidden port".
+
+Intentionally, this rule aims to alert the system admins about any illegal request to outside in port 80. The IDS cannot really determine the direction, so it assumes any thing in the header, from field "source" address is the originated place of the packet.
+
+So the attacker decided to forge 3 packets: `SYN`, `SYN/ACK` and `ACK` with a faked IP from internal system `10.0.2.0/24` for example.
+
+Because the IDS is completely direction blind, it allocates a slot in the state table to track this connection (to monitor the abnormal), especially with the IDS following the handshake-sync.
+
+With thoudsands or millions of these packets (with each a slightly adjust source addresses), the IDS will be exhausted.
+
+So the counter is: never trust, never allow such a coming packet with internal IP addresses
