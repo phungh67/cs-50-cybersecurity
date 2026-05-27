@@ -56,3 +56,5 @@ In a network topology, the position of a server can affect greatly to its securi
 **`VPN` server can be located in DMZ zone**:
 - Compromised server, at least the cleartext `VPN` traffic to the internal network can be captured.
 - Should separate traffic between servers in the DMZ (for better trace).
+
+![Summary about Security Now-and-Then](summary-security-vpn-stuff.png)
