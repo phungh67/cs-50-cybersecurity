@@ -197,3 +197,5 @@ And, a firewall cannot switch its natural, from passive match-and-drop (`statele
 
 Also, Denial of Service [[Cybersecurity/cs-50-cybersecurity/Network-security/Denial of service attack|Denial of service attack]] is a kind of attack that we can only mitigate, cannot avoid 100% percent since all machines and systems have their limits (max open files, CPU power, memory capacity,...).
 
+If a firewall was overloaded with traffic, it must drop all traffic, uninspected, this somehow achieved the goal of Denial of Service attack.
+
