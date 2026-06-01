@@ -13,7 +13,7 @@ With Port Knocking, a local firewall (like `iptables` or `nftables`) is configur
 ### 2. The Operational Mechanics (The "Secret Knock")
 
 To gain access, a legitimate user must use a specialized port knocking client utility to send a precise sequence of connection attempts to a set of closed, completely arbitrary ports.
-
+		ze
 #### Step A: The Knock Sequence
 
 The user's client machine intentionally transmits connection attempts (usually stateless **`UDP`** or **`TCP` `SYN`** packets) to a pre-arranged sequence of numbers.

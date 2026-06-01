@@ -10,6 +10,21 @@ With the sufficient condition, a yes means yes but no does not ensure it is impo
 
 So to prove a task set that is possible to schedule (or unschedulable), need to perform the exact test (both necessary and sufficient property).
 
+>[! Note]
+>But before any feasibility test, the primary motivation is the worst time execution analysis by Shaw's. It is a way to estimate the execution time of any code block or program in the worst case (longest path of a code snippet).
+
+This method is quite useful in some early generation of processor, in which the pipeline execution and the caching were not applied. With new methods and especially the RISC-V family, the `WCET`
+ become more and more challenging.
+ 
+ Check the [[Worst execution time exercises]] for more practical problems and how to solve them.
+ Note that, for RISC-V processor, we have several visible challenging:
+ - Pipeline, leading to source of time variations (data conflict, branch conflict and even cache missed) -> so that the cache itself is a source that affect tot the result of worst time analysis.
+ - With the cache memory, the main challenge comes from different caching methods between data and instruction.
+ - With the pipeline execution, the conflict can happen between code blocks.
+
+## General way about scheduling
+[[Scheduling in modern system]]
+
 ## The first and the most primitive way to analyze a task set
 
 >[! Formula] 

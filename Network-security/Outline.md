@@ -15,6 +15,8 @@ This section contains the revision about theoretical concepts. According with ti
 [[IPsec]] - IP security, most commonly in the VPN site to site.
 [[Remote Authentication Kerberos]] - A third party authentication system with ticket mechanism.
 [[Link Layer Security]] - almost last layer, with `ARP`, MAC and even `DNSSEC`
+[[VPN systems and Network design]] - Some takeaway notes about how `VPN` is implemented in real world applications.
+[[Summary]] - last note, last lecture, a sum up about Network security - what is it, why have to learn it?
 
 # 2. Laboratories
 
