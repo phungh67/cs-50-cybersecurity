@@ -62,7 +62,7 @@ It is simpler than RM, as long as the $\sum_i^n \frac{C_i}{T_i}$ is less than 1,
 No, just test is not enough, the formula is just the sufficient test, a no cannot mean that there is not possible algorithm for the task set, and also, the "Liu and Layland's", which draws from the Processor Utilization Analysis (PUA), suitable for BOTH static and dynamic, so there is also something that were not covered.
 
 So we have another test Response Time Analysis (RTA).
-$$  R_i^{n+1} = C_i + \sum_{\forall \tau_j} [\frac{R_i^n}{T_j}] * c_j $$
+$$  R_i^{n+1} = C_i + \sum_{\forall \tau_j} \lceil \frac{R_i^n}{T_j} \rceil * c_j $$
 To be short, we take every task, to inspect the Response Time $R$ which is calculated by take the execution time of the current task $c_i$ plus the total time of interference tasks (whose priorities are far higher than current task). 
 
 In the interference element, we take the ceiling of the previous Response Time, divided by the period of higher task then multiply the result with execution time of that higher one.

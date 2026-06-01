@@ -47,3 +47,7 @@ Check the note about [[Hyper Period Analysis (HPA)]] - instruction, example abou
 Check the note [[Pseudo-parallel execution]] section 3 for more information.
 
 Depends on the priority of the task (rate monotonic or deadline monotonic), we decide the factor in each task's RTA formula. The interference factor is **rounded down**.
+
+## Old exams 
+
+Information and example solution for previous examinations

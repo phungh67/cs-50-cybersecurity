@@ -25,6 +25,7 @@ In this example, we have 4 tasks: $\tau_1$, $\tau_2$, $\tau_3$ and $\tau_4$ , wi
 
 ![[HPA-guide.png]]
 
+A small example about the cyclic executive also written in [[Scheduling in modern system]]
 
 With the EDF - Earliest Deadline First, which task has the closet deadline will win. Also in this case, task is allowed to preempt each other, so that we have the above diagram.
 
