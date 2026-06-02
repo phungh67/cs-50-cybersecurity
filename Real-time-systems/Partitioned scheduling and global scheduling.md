@@ -33,6 +33,9 @@ $$
 U = \sum_i^n \frac{C_i}{T_i} = m * \frac{m}{3m - 2}
 $$
 
+>[! Notes]
+>Dhall's effect - Weak theoretical framework: with RM, DM and even EDF, some low utilization task sets can be non-schedulable regardless of how many processors are used. Thus, any utilization guarantee bound would become so low that it would be useless in the practice. Contrast with the single-processor where we have the bound of $ln(2)$ for RM and 100% for EDF
+
 # 3. Response Time Analysis
 $$
 R_i = C_i + I_i = C_i + \frac{1}{m} \sum_{\forall j \in hp(i)} (\lceil\frac{R_i}{T_j} \rceil.C_j + C_j) \le D_i
