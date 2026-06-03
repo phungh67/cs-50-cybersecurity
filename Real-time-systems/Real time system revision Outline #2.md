@@ -22,6 +22,10 @@ This method is quite useful in some early generation of processor, in which the 
  - With the cache memory, the main challenge comes from different caching methods between data and instruction.
  - With the pipeline execution, the conflict can happen between code blocks.
 
+Also, why the worst execution time analysis must be as tight as possible (and also pestimistic):
+- Pessimistic to ensure that even with some hard tasks, they are still be abled to be schedublable at runtime.
+- Tight so that it can avoid unnecessary pessimistic which could case the feasibility test to be too inaccurate to be useful.
+
 ## General way about scheduling
 [[Scheduling in modern system]]
 
