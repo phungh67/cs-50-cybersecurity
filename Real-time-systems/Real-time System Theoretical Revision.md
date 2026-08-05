@@ -32,6 +32,9 @@ For example: a periodic task is a task that we can surely estimate the arrival t
 
 In the `TinyTimber`kernel, there are several methods that implement (and address) these phenomenons. For example, the `AFTER()` function delays the execution of a method to the earliest offset (so you don't have to worry about the "administration" cost) - it's not like the administrator cost is reduced to zero, but it is more like that you can predict and calculate the execution, completion time better, because the task would not be executed util all the administration stuff was completed.
 
+**Periodic tasks** - the time duration between 2 subsequent tasks is exactly $T_i$ 
+**Sporadic tasks** - the time duration between 2 subsequent tasks can be equal or greater that $T_i$
+
 # C. Priority inversion
 
 In computing, programming and even real-time controlling, the shared resources are a very hard-to-deal problem.
@@ -66,3 +69,17 @@ As stated in the slide:
 > [!Slides] Dhall's effect
 > Dhall's Effect describes a paradoxical situation in global multiprocessor scheduling (like Global RM or Global EDF) where a task set can be unschedulable on $M$ processors even if the total system utilization is incredibly low (approaching exactly 1, meaning almost all processors are completely idle).
 > It happens when you mix many "light" tasks (tasks with tiny execution times and very short periods/deadlines) with one "heavy" task (a task where execution time is almost equal to its period, $U \approx 1$). Because global schedulers prioritize based on short deadlines/periods, the light tasks are given top priority. They constantly bounce around the processors, repeatedly preempting the heavy task. The heavy task is starved of the continuous CPU time it desperately needs and misses its deadline, even while other processors sit empty.
+
+# D. Scheduling analysis
+
+The feasibility test produces only 2 outcome and they are always binary, "True" or "False". But the conclusion about the schedulability of a given task set depends on the test: sufficient, necessary or exact (sufficient and necessary).
+
+- **Sufficient test**: a "Yes" outcome means the task set will be scheduled in the processor, but a "No" outcome is insufficient to conclude that these tasks could not be scheduled in the said processor. Further investigation is needed.
+- **Necessary test**: a "No" outcome proves that the given task set could not be scheduled in the processor, but a "Yes" is also not enough to prove the scheudulability.
+- **Exact test** is a combination of both necessity and sufficiency, which provides unified answer, a "Yes" is a yes and a "No" is a no.
+
+In the term of feasibility test, there are several methods that are widely used:
+- Hyper period analysis - HPA for short: in an existing schedule, no task execution may miss its deadline. The disadvantage comes from the drawing of long long execution time because we must analyze them at least $T$ while $T$ is the least common multiplier of these tasks.
+- Processor utilization analysis - PUA: the fraction of processor time that is used for executing the task set must not exceed a given bound (the Liu and Layland formula).
+- Response time analysis - RTA: the worst-case response time for each task must not exceed the deadline of the task (commonly used with RM or DM system).
+- Processor demand analysis - PDA (commonly used in the EDF system) the accumulated computation demand for the task set under a given time interval must not exceed the length of the interval.
