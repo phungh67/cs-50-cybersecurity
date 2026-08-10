@@ -16,6 +16,10 @@ So the different is: while current offset calling returns the current timeline f
 
 Which means the current offset is purely time-checking, while the sample is more used for calculating purpose, since it depends on the baseline of an event (as stated in the slide, lecture 6, page 9, Real Time System course).
 
+With `TinyTimber` kernel, it uses Earliest-Deadline-Priority `EDF`, which can be further leveraged by using method like `BEFORE()`or `SEND()`. In this case, `BEFORE()`specify a deadline, then the method should be completed before that deadline. On the other hand, the `SEND()`method allowed user to invoke a method from a predefined baseline, and requires it to complete before a deadline.
+
+The `ASYNC()`and `SYNC()`are two fundamentally building blocks of the kernel, and as their names, they invoke task asynchronously and synchronously. To achieve concurrent programming, the `ASYNC()`method should be used, since the `SYNC()`method will block the execution till the callee returned some result (which can result a very long waiting time).
+
 >[!Notes]
 >There is difference between periodic and sporadic task.
 >For periodic task, it will arrive at a predictable manner, well defined period, well defined arrive time (but apparently, completion time and whether it satisfies deadline is are not guaranteed).
@@ -28,7 +32,7 @@ Normally, a task can arrive at a identified time, but the total time of executio
 For example: a periodic task is a task that we can surely estimate the arrival time and can definitively know that there is always an instance of that task appears every $\tau$ time (the period). But we have a new thing to consider: "systematic time skew".
 
 >[!Definition]
->Systematic time skew is a phenomenon caused by the "prolong" of the waiting time between 2 sequentially instances of the very same task. Because each task have an action time (or execution time) $\delta_{action}$ and maybe the "administration time" - the time for condition evaluation, constructing the loop, take out the function from the stack,... $\delta_{loop}$, hence, making the gap between 2 instances is now the sum of period time, execution time and loop time. Later, the more instances have come, the longer the waiting time between is.
+>Systematic time skew is a phenomenon caused by the relative delay when trying to making waiting time during real time programming. Relative delay caused the object/method to wait with a "piece of time" from that point - hence, due to administrator cost of constructing conditional code, the delay might be prolonged for every subsequent instances. This can be solved by using absolute delay, with method `SEND()`of `AFTER()`in the `TinyTimber` kernel, enforces the delay based on a pre-defined baseline.
 
 In the `TinyTimber`kernel, there are several methods that implement (and address) these phenomenons. For example, the `AFTER()` function delays the execution of a method to the earliest offset (so you don't have to worry about the "administration" cost) - it's not like the administrator cost is reduced to zero, but it is more like that you can predict and calculate the execution, completion time better, because the task would not be executed util all the administration stuff was completed.
 
@@ -52,6 +56,11 @@ Each resource is assigned a priority ceiling equal to the priority of the highes
 
 When a task blocks one or more higher priority tasks it temporarily inherits the highest priority of the blocked task - so the task can only be blocked by higher task, at most blocked once during the critical region time.
 
+## Critical Instant
+
+Refer to the scenario in which during a task's arrival, the response time of a given task is maximized. Applied for both single and multiple processors system.
+
+In the preemptive schedule in single processor, the most notably demonstration is that tasks arrive at the same time, resulting the lower priority task might take longer time to response (because the system favored the high priority tasks) but in the multiprocessor scheduling, this scenario may not be applied.
 
 # C. Execution-time analysis
 
