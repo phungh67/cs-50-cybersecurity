@@ -62,6 +62,19 @@ Refer to the scenario in which during a task's arrival, the response time of a g
 
 In the preemptive schedule in single processor, the most notably demonstration is that tasks arrive at the same time, resulting the lower priority task might take longer time to response (because the system favored the high priority tasks) but in the multiprocessor scheduling, this scenario may not be applied.
 
+## Deadlock
+
+Deadlock is a phenomenon that can happen when 2 object both wait for other object to release the requested shared resources. 
+There are two task $\tau_1$ and $\tau_2$ with 2 resources $R_1$ and $R_2$. The priority is high for task 1 and low for task 2. So apparently, task 2 will be preempted if task 1 is ready. When there is no task, 2 can be run and lock resource 2. Then 1 became ready and run, then run first because priority. It locked resource 1 and tried to acquire resource 2 but since $\tau_1$ was preempted before releasing, it would be blocked. Under `PIP`, task 1 would become high priority, continued to executing and tried to acquire resource 1, which is held by $\tau_2$, hence created a deadlock.
+
+## Chain lock
+
+Very easy to misunderstand this concept with the deadlock. While deadlock may refer to a situation where 2 object circular wait and request each other to unlock a necessary object, chain lock is about a high priority task was reverted to the lowest one.
+
+We have four tasks: 1,2,3 and 4 with 3 resources (shared) a, b and c. The priority is increasing from 1 to 4. 1 run first, lock a, then preempted by 2, lock b and then preempted by 3 and lock c. At that time, 4 run, but cannot acquire c since it was locked by 3, then under `PIP`, 3 was elevated to same level as 4, but also locked by 2, then 1, then finally, 1 inherited the highest priority as same as 4, run, then release a, then 2, then 3 and finally 4. 
+
+4 is the highest, but turned out locked by 3, 2, and 1 (chain lock). Then executed last in the pipeline.
+
 # C. Execution-time analysis
 
 A Worst case execution time `WCET`estimate must be: pessimistic but tight $0 \le (Estimated WCET) - Real(WCET) \le \epsilon$  with $\epsilon$ is very small compared to real result.
