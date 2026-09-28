@@ -106,3 +106,5 @@ So the first block will be 100 - 116, 117 - 133, 133 - 149, 150 - 160
 
 Three accesses = detect => 100, 110 and 120 should be enough to trigger. 120 lies on the second block. So at least 2 missed block. Last 2 blocks will be perfectly fetched.
 
+This technique aims to improve the performance. Every miss costs a huge penalty (for example in the above case, 28 cycles in comparison to only 1 cycle for each instructions, hence a miss costs at least 4 iterations). But the pre-fetch does not terminate the penalty forever, there are still penalties at several earlier loops, but for the next loops there is no penalty at all.
+
